@@ -3,7 +3,7 @@
     <style name="Base.Theme.CameraManager" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/white</item>
         <item name="colorSecondary">#505452</item>
-        <item name="android:statusBarColor" tools:targetApi="l">#505452</item>
+        <item name="android:statusBarColor">#505452</item>
     </style>
 
     <style name="Theme.CameraManager" parent="Base.Theme.CameraManager" />
