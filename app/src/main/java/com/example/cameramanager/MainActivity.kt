@@ -52,6 +52,10 @@ class MainActivity : AppCompatActivity() {
             getCameras()
         }
 
+        val serviceIntent = Intent(this, MotionDetectionService::class.java)
+        serviceIntent.putExtra("serverIp", ip)
+        startService(serviceIntent)
+
         val fabAddCamera: FloatingActionButton = findViewById(R.id.fab_add_camera)
         fabAddCamera.setOnClickListener {
             val intent = Intent(this, AddCameraActivity::class.java)
@@ -71,7 +75,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun askForIP(sharedPref: SharedPreferences) {
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("Enter Raspberry Pi IP")
+        builder.setTitle("Introduce la IP de la raspberry Pi")
 
         val input = EditText(this)
         builder.setView(input)

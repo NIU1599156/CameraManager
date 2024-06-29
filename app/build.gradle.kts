@@ -58,4 +58,7 @@ dependencies {
     // Swipe to refresh
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
+    // Http server for notifications
+    implementation("com.sun.net.httpserver:http:20070405")
+
 }
