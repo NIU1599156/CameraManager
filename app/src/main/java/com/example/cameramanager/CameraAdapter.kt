@@ -12,8 +12,14 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import android.util.Log
+import android.widget.PopupMenu
 
-class CameraAdapter(private val context: Context, private var cameraList: List<Camera>) :
+class CameraAdapter(
+    private val context: Context,
+    private var cameraList: List<Camera>,
+    private val onEditCamera: (Camera) -> Unit,
+    private val onDeleteCamera: (Camera) -> Unit
+) :
     RecyclerView.Adapter<CameraAdapter.CameraViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CameraViewHolder {
@@ -23,7 +29,7 @@ class CameraAdapter(private val context: Context, private var cameraList: List<C
 
     override fun onBindViewHolder(holder: CameraViewHolder, position: Int) {
         val camera = cameraList[position]
-        holder.cameraName.text = camera.name
+        holder.bind(camera)
 
         // Para todas las cámaras miramos la cámara pulsada
         holder.itemView.setOnClickListener {
@@ -58,7 +64,35 @@ class CameraAdapter(private val context: Context, private var cameraList: List<C
         return cameraList.size
     }
 
-    class CameraViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val cameraName: TextView = itemView.findViewById(R.id.cameraName)
+    inner class CameraViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val cameraName: TextView = itemView.findViewById(R.id.cameraName)
+
+        fun bind(camera: Camera) {
+            cameraName.text = camera.name
+
+            itemView.setOnLongClickListener {
+                showPopupMenu(it, camera)
+                true
+            }
+        }
+
+        private fun showPopupMenu(view: View, camera: Camera) {
+            val popupMenu = PopupMenu(context, view)
+            popupMenu.inflate(R.menu.camera_popup_menu)
+            popupMenu.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.action_edit -> {
+                        onEditCamera(camera)
+                        true
+                    }
+                    R.id.action_delete -> {
+                        onDeleteCamera(camera)
+                        true
+                    }
+                    else -> false
+                }
+            }
+            popupMenu.show()
+        }
     }
 }
