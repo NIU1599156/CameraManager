@@ -23,7 +23,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.appcompat.app.AppCompatDelegate
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var recyclerView: RecyclerView
     private lateinit var cameraAdapter: CameraAdapter
     private lateinit var cameraList: List<Camera>
@@ -35,18 +34,23 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Usamos modo claro siempre
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
+        // Configuramos la barra de herramientas (toolbar)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
+        // Configuramos RecyclerView para poder recargar las cámaras
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
 
+        // Obtenemos las preferencias compartidas para la ip de la rpi
         val sharedPref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
         val ip = sharedPref.getString("raspberry_ip", null)
 
+        // Si no hay IP guardada, la pedimos al usuario
         if (ip == null) {
             askForIP(sharedPref)
         } else {
@@ -54,24 +58,29 @@ class MainActivity : AppCompatActivity() {
             getCameras()
         }
 
+        // Iniciamos el servicio de detección de movimiento
         startMotionDetectionService(ip)
 
+        // Configuramos el boton flotante para añadir una nueva cámara
         val fabAddCamera: FloatingActionButton = findViewById(R.id.fab_add_camera)
         fabAddCamera.setOnClickListener {
             val intent = Intent(this, AddCameraActivity::class.java)
             addCameraLauncher.launch(intent)
         }
 
+        // Registramos el lanzador de actividad para que si se añade la cámara se recargue la vista
         addCameraLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 getCameras()
             }
         }
 
+        // Configuramos la acción de deslizar hacia abajo para refrescar la lista de cámaras
         swipeRefreshLayout.setOnRefreshListener {
             refreshApiAndServices()
         }
 
+        // Registramos el lanzador de actividad para que si volvemos al main activity se recarguen las cámaras
         settingsLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 refreshApiAndServices()
@@ -79,11 +88,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Inflamos el menú de opciones existente
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
         return true
     }
 
+    // Manejamos las opciones del menú para que se puedan activar las alarmas y ir a configuración
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_settings -> {
@@ -98,6 +109,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Pedimos la IP al usuario por un popup
     private fun askForIP(sharedPref: SharedPreferences) {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Introduce la dirección IP de la raspberry Pi")
@@ -124,6 +136,7 @@ class MainActivity : AppCompatActivity() {
         builder.show()
     }
 
+    // Obtenemos la lista de cámaras des de la API de la rpi
     private fun getCameras() {
         swipeRefreshLayout.isRefreshing = true
 
@@ -153,6 +166,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    // Refrescamos la API y los servicios de detección de movimiento para prevenir errores
     private fun refreshApiAndServices() {
         val sharedPref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
         val newIp = sharedPref.getString("raspberry_ip", null)
@@ -163,6 +177,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Iniciamos el servicio de detección de movimiento
     private fun startMotionDetectionService(ip: String?) {
         if (ip != null) {
             val serviceIntent = Intent(this, MotionDetectionService::class.java)
@@ -171,6 +186,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Reiniciamos el servicio de detección de movimiento
     private fun restartMotionDetectionService(ip: String?) {
         if (ip != null) {
             stopService(Intent(this, MotionDetectionService::class.java))
@@ -178,6 +194,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Mostramos el popup de confirmación para activar la alarma
     private fun showAlarmConfirmationDialog() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Activar Alarma")
@@ -192,6 +209,7 @@ class MainActivity : AppCompatActivity() {
         builder.show()
     }
 
+    // Activamos la alarma a través de la API
     private fun activateAlarm() {
         val apiInterface = ApiClient.apiInterface
         val call = apiInterface.activateAlarm()
@@ -210,12 +228,14 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    // Editamos una cámara
     private fun editCamera(camera: Camera) {
         val intent = Intent(this, AddCameraActivity::class.java)
         intent.putExtra("camera", camera)
         startActivity(intent)
     }
 
+    // Eliminamos una cámara
     private fun deleteCamera(camera: Camera) {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Borrar Cámara")
@@ -230,6 +250,7 @@ class MainActivity : AppCompatActivity() {
         builder.show()
     }
 
+    // Realizamos la eliminación de la cámara a través de una llamada a la API
     private fun performDeleteCamera(camera: Camera) {
         val apiInterface = ApiClient.apiInterface
         val call = apiInterface.deleteCamera(camera.id)
@@ -250,6 +271,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    // Refrescamos la interfaz y servicios siempre que la actividad vuelve al primer plano
     override fun onResume() {
         super.onResume()
         refreshApiAndServices()

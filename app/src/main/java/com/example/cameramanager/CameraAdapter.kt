@@ -14,28 +14,30 @@ import retrofit2.Response
 import android.util.Log
 import android.widget.PopupMenu
 
+// Adaptador para la vista que maneja la lista de cámaras en la pantalla principal
 class CameraAdapter(
     private val context: Context,
     private var cameraList: List<Camera>,
     private val onEditCamera: (Camera) -> Unit,
     private val onDeleteCamera: (Camera) -> Unit
-) :
-    RecyclerView.Adapter<CameraAdapter.CameraViewHolder>() {
+) : RecyclerView.Adapter<CameraAdapter.CameraViewHolder>() {
 
+    // Inflamos el layout para cada cámara de la vista
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CameraViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.camera_item, parent, false)
         return CameraViewHolder(view)
     }
 
+    // Vinculamos los datos de las cámaras con las vistas para cada elemento de la vista
     override fun onBindViewHolder(holder: CameraViewHolder, position: Int) {
         val camera = cameraList[position]
         holder.bind(camera)
 
-        // Para todas las cámaras miramos la cámara pulsada
+        // Configurar el clic en cada elemento del RecyclerView para iniciar el stream
         holder.itemView.setOnClickListener {
             val apiInterface = ApiClient.apiInterface
             val call = apiInterface.startCamera(camera.id)
-            // Hacemos la llamada a la api para empezar el streaming en la rpi
+            // Hacer la llamada a la API para iniciar el stream en la Raspberry Pi
             call.enqueue(object : Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     if (response.isSuccessful) {
@@ -60,24 +62,29 @@ class CameraAdapter(
         }
     }
 
+    // Obtenemos el número de elementos en la lista de cámaras
     override fun getItemCount(): Int {
         return cameraList.size
     }
 
+    // Creamos un ViewHolder para representar y implementar acciones a cada cámara en la vista
     inner class CameraViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val cameraName: TextView = itemView.findViewById(R.id.cameraName)
         private val cameraIp: TextView = itemView.findViewById(R.id.cameraIp)
 
+        // Vinculamos los datos de la cámara con las vistas
         fun bind(camera: Camera) {
             cameraName.text = camera.name
             cameraIp.text = camera.ip
 
+            // Configuramos la pulsación larga para mostrar el popup
             itemView.setOnLongClickListener {
                 showPopupMenu(it, camera)
                 true
             }
         }
 
+        // Mostramos el popup con opciones para editar o eliminar la cámara
         private fun showPopupMenu(view: View, camera: Camera) {
             val popupMenu = PopupMenu(context, view)
             popupMenu.inflate(R.menu.camera_popup_menu)
