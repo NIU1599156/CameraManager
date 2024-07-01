@@ -20,6 +20,7 @@ import android.widget.EditText
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
+import androidx.appcompat.app.AppCompatDelegate
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,6 +35,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
@@ -42,14 +45,6 @@ class MainActivity : AppCompatActivity() {
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
 
         val sharedPref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-
-        /* DEBUG por si hay que borrar el sharedPref para testear
-        with(sharedPref.edit()) {
-            clear()
-            apply()
-        }
-        */
-
         val ip = sharedPref.getString("raspberry_ip", null)
 
         if (ip == null) {
@@ -107,8 +102,10 @@ class MainActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Introduce la dirección IP de la raspberry Pi")
 
-        val input = EditText(this)
-        builder.setView(input)
+        val inflater = layoutInflater
+        val dialogLayout = inflater.inflate(R.layout.popup_text, null)
+        val input = dialogLayout.findViewById<EditText>(R.id.editText)
+        builder.setView(dialogLayout)
 
         builder.setPositiveButton("OK") { dialog, _ ->
             val ip = input.text.toString()

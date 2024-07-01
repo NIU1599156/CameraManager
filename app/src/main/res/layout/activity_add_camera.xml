@@ -1,32 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/etName"
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Nombre de la cámara"
-        android:padding="8dp"/>
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:title="Editor de cámaras"
+        app:titleTextColor="@android:color/white"/>
 
-    <EditText
-        android:id="@+id/etIp"
+    <!-- Container to center content vertically -->
+    <LinearLayout
+        android:padding="16dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="IP de la cámara"
-        android:padding="8dp"
-        android:layout_below="@id/etName"
-        android:layout_marginTop="16dp"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_below="@id/toolbar"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true">
 
-    <Button
-        android:id="@+id/btnAddCamera"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Añadir Cámara"
-        android:layout_below="@id/etIp"
-        android:layout_marginTop="16dp"
-        android:layout_centerHorizontal="true"/>
+        <EditText
+            android:id="@+id/etName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre de la cámara"
+            android:padding="8dp"
+            android:layout_marginBottom="16dp"/>
 
+        <EditText
+            android:id="@+id/etIp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="IP de la cámara"
+            android:padding="8dp"
+            android:layout_marginTop="16dp"/>
+
+        <Button
+            android:id="@+id/btnAddCamera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Añadir Cámara"
+            android:layout_marginTop="16dp"
+            android:layout_gravity="center_horizontal"/>
+    </LinearLayout>
 </RelativeLayout>

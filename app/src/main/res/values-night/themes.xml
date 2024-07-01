@@ -1,7 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.CameraManager" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    <style name="Base.Theme.CameraManager" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">#505452</item>
+        <item name="colorSecondary">#69706d</item>
+        <item name="android:statusBarColor">#505452</item>
     </style>
+
+    <style name="Theme.CameraManager" parent="Base.Theme.CameraManager" />
 </resources>

@@ -10,9 +10,9 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorSecondary"
-        android:theme="?attr/actionBarTheme"
-        app:title="Camera Manager" />
+        android:background="?attr/colorPrimary"
+        app:title="Camera Manager"
+        app:titleTextColor="@color/white" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
@@ -25,7 +25,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="72dp"
-            android:padding="16dp"
             tools:listitem="@layout/camera_item" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
@@ -39,6 +38,6 @@
         android:layout_margin="16dp"
         app:srcCompat="@android:drawable/ic_input_add"
         app:tint="@android:color/white"
-        android:backgroundTint="@color/black" />
+        android:backgroundTint="?attr/colorPrimary" />
 
 </RelativeLayout>

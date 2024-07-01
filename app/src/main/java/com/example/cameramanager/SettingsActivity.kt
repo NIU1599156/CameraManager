@@ -36,9 +36,11 @@ class SettingsActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Cambiar IP de la Raspberry Pi")
 
-        val input = EditText(this)
+        val inflater = layoutInflater
+        val dialogLayout = inflater.inflate(R.layout.popup_text, null)
+        val input = dialogLayout.findViewById<EditText>(R.id.editText)
         input.setText(sharedPref.getString("raspberry_ip", ""))
-        builder.setView(input)
+        builder.setView(dialogLayout)
 
         builder.setPositiveButton("OK") { dialog, _ ->
             val ip = input.text.toString()

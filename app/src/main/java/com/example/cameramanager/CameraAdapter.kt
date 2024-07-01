@@ -66,9 +66,11 @@ class CameraAdapter(
 
     inner class CameraViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val cameraName: TextView = itemView.findViewById(R.id.cameraName)
+        private val cameraIp: TextView = itemView.findViewById(R.id.cameraIp)
 
         fun bind(camera: Camera) {
             cameraName.text = camera.name
+            cameraIp.text = camera.ip
 
             itemView.setOnLongClickListener {
                 showPopupMenu(it, camera)

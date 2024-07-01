@@ -3,23 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="16dp"
+    android:orientation="vertical"
+    android:padding="25dp"
     android:background="?android:attr/selectableItemBackground"
     android:gravity="center_vertical">
 
   <TextView
       android:id="@+id/cameraName"
-      android:layout_width="0dp"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_weight="1"
-      android:textSize="18sp"
-      android:textColor="@android:color/black" />
+      android:textSize="16sp"
+      android:textStyle="bold"
+      android:textColor="@android:color/black"/>
 
-  <ImageView
-      android:layout_width="24dp"
-      android:layout_height="24dp"
-      android:src="@android:drawable/ic_menu_camera"
-      app:tint="@color/black" />
-
+  <TextView
+      android:id="@+id/cameraIp"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textSize="14sp"
+      android:textColor="@android:color/darker_gray"/>
 </LinearLayout>
